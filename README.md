@@ -1,27 +1,17 @@
-# {{crate_name}}
+# spatie-opening-hours
 
-[![Latest version on crates.io](https://img.shields.io/crates/v/{{crate_name}}.svg?style=flat-square)](https://crates.io/crates/{{crate_name}})
-[![Tests](https://img.shields.io/github/actions/workflow/status/{{owner}}/{{repository}}/ci.yml?branch=main&style=flat-square)](https://github.com/{{owner}}/{{repository}}/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/{{owner}}/{{repository}}/blob/main/LICENSE.md)
-[![Total downloads](https://img.shields.io/crates/d/{{crate_name}}.svg?style=flat-square)](https://crates.io/crates/{{crate_name}})
+[![Latest version on crates.io](https://img.shields.io/crates/v/spatie-opening-hours.svg?style=flat-square)](https://crates.io/crates/spatie-opening-hours)
+[![Tests](https://img.shields.io/github/actions/workflow/status/spatie/opening-hours-rust/ci.yml?branch=main&style=flat-square)](https://github.com/spatie/opening-hours-rust/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/spatie/opening-hours-rust/blob/main/LICENSE.md)
+[![Total downloads](https://img.shields.io/crates/d/spatie-opening-hours.svg?style=flat-square)](https://crates.io/crates/spatie-opening-hours)
 
-<!--delete-->
----
-Use this template to create a Rust package:
+With `spatie-opening-hours` you create an object that describes a business' opening hours, which you can query for open or closed on days or specific dates, or use to present the times per day.
 
-1. Press the "Use this template" button to create a new repository with this skeleton's contents.
-2. Run `python3 configure.py` (Windows: `py -3 configure.py`) to replace the placeholders and remove the template-only files.
-3. Have fun creating your package.
-
-Requires Python 3.11+ for configuration and [Rust](https://rustup.rs/) 1.89+ for the library. See [SKELETON.md](SKELETON.md) for template maintenance and non-interactive use.
-
----
-<!--/delete-->
-{{description}}
+This is a Rust port of [spatie/opening-hours](https://github.com/spatie/opening-hours).
 
 ## Support us
 
-[<img src="https://spatie.be/github-ad-image/{{repository}}.jpg" alt="Support Spatie's open source work" width="419px" />](https://spatie.be/github-ad-click/{{repository}})
+[<img src="https://spatie.be/github-ad-image/opening-hours-rust.jpg" alt="Support Spatie's open source work" width="419px" />](https://spatie.be/github-ad-click/opening-hours-rust)
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
 
@@ -29,28 +19,45 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 
 ## Installation
 
-Requires Rust 1.89 or newer. Once the crate is published:
+Requires Rust 1.89 or newer.
 
 ```sh
-cargo add {{crate_name}}
-```
-
-Before publication, use a path dependency from a neighboring application:
-
-```toml
-[dependencies]
-{{crate_name}} = { path = "../{{repository}}" }
+cargo add spatie-opening-hours
 ```
 
 ## Usage
 
-```rust
-use {{crate_import}}::greet;
+A set of opening hours is created by passing in a regular schedule, and a list of exceptions.
 
-assert_eq!(greet("Freek"), "Hello, Freek!");
+```rust
+# fn main() -> Result<(), Box<dyn std::error::Error>> {
+use spatie_opening_hours::{OpeningHours, serde_json::json};
+
+let opening_hours = OpeningHours::create(json!({
+    "monday":    ["09:00-12:00", "13:00-18:00"],
+    "tuesday":   ["09:00-12:00", "13:00-18:00"],
+    "wednesday": ["09:00-12:00"],
+    "thursday":  ["09:00-12:00", "13:00-18:00"],
+    "friday":    ["09:00-12:00", "13:00-20:00"],
+    "saturday":  ["09:00-12:00", "13:00-16:00"],
+    "sunday":    [],
+    "exceptions": {
+        "2016-11-11": ["09:00-12:00"],
+        "2016-12-25": [],
+        "01-01": [],
+        "12-25": ["09:00-12:00"]
+    }
+}))?;
+
+assert!(opening_hours.is_open_on("monday")?);
+assert!(opening_hours.is_closed_on("2016-12-25")?);
+# Ok(())
+# }
 ```
 
-See the [usage guide](https://github.com/{{owner}}/{{repository}}/blob/main/docs/usage.md).
+The crate supports overnight hours, recurring exceptions, date filters, business and output timezones, next/previous opening and closing times, open/closed durations, and schema.org structured data.
+
+See the [usage guide](https://github.com/spatie/opening-hours-rust/blob/main/docs/usage.md) and [PHP behavior mapping](https://github.com/spatie/opening-hours-rust/blob/main/docs/php-parity.md). Rust uses chrono date/time values, snake_case methods, `Result` for errors, `Option` for absence, and iterator operations for collection callbacks.
 
 ## Testing
 
@@ -59,27 +66,29 @@ cargo test --locked --all-targets --all-features
 cargo test --locked --doc --all-features
 ```
 
-See [all quality checks](https://github.com/{{owner}}/{{repository}}/blob/main/docs/testing.md). The README and Markdown guides are tested by rustdoc, including setup on hidden `# ` lines.
+See [all quality checks](https://github.com/spatie/opening-hours-rust/blob/main/docs/testing.md). The README and Markdown guides are tested by rustdoc, including setup on hidden `# ` lines.
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/{{owner}}/{{repository}}/blob/main/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/spatie/opening-hours-rust/blob/main/CHANGELOG.md).
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://github.com/{{owner}}/{{repository}}/blob/main/CONTRIBUTING.md) and the [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/).
+See [CONTRIBUTING.md](https://github.com/spatie/opening-hours-rust/blob/main/CONTRIBUTING.md) and the [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/).
 
 Using an AI coding agent? Load Apollo's [rust-best-practices skill](https://github.com/apollographql/skills/tree/main/skills/rust-best-practices) when writing or reviewing code in this package.
 
 ## Security Vulnerabilities
 
-Report vulnerabilities privately using the instructions in [SECURITY.md](https://github.com/{{owner}}/{{repository}}/blob/main/SECURITY.md).
+Report vulnerabilities privately using the instructions in [SECURITY.md](https://github.com/spatie/opening-hours-rust/blob/main/SECURITY.md).
 
 ## Credits
 
-- [{{author_name}}](https://github.com/{{author_username}})
-- [All contributors](https://github.com/{{owner}}/{{repository}}/graphs/contributors)
+- [Sebastian De Deyne](https://github.com/sebastiandedeyne)
+- [Kyle Katarn](https://github.com/kylekatarnls)
+- [Freek Van der Herten](https://github.com/freekmurze)
+- [All contributors](https://github.com/spatie/opening-hours-rust/graphs/contributors)
 
 ## License
 
-The MIT License (MIT). See [LICENSE.md](https://github.com/{{owner}}/{{repository}}/blob/main/LICENSE.md).
+The MIT License (MIT). See [LICENSE.md](https://github.com/spatie/opening-hours-rust/blob/main/LICENSE.md).

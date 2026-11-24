@@ -5,15 +5,10 @@ weight: 3
 
 Requires Rust 1.89 or newer. Install Rust using [rustup](https://rustup.rs/).
 
-Once the crate is published, add it to your application:
+Add it to your application:
 
 ```sh
-cargo add {{crate_name}}
+cargo add spatie-opening-hours
 ```
 
-Before publication, use a local path dependency:
-
-```toml
-[dependencies]
-{{crate_name}} = { path = "../{{repository}}" }
-```
+The date/time types, IANA timezone names, and JSON definition macro are re-exported as `chrono`, `chrono_tz`, and `serde_json`. No PHP runtime or external service is required.

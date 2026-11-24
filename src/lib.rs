@@ -1,15 +1,23 @@
 #![doc = include_str!("../README.md")]
 
-/// Returns a greeting addressed to `name`.
-///
-/// ```rust
-/// # use {{crate_import}}::greet;
-/// assert_eq!(greet("Freek"), "Hello, Freek!");
-/// ```
-#[must_use]
-pub fn greet(name: &str) -> String {
-    format!("Hello, {name}!")
-}
+mod day;
+mod error;
+mod schedule;
+mod time;
+mod timezone;
+
+pub use day::{Day, OpeningHoursForDay};
+pub use error::Error;
+pub use schedule::{DateFilter, DateTimeRange, OpeningHours, SearchOptions, WeekGroup};
+pub use time::{PreciseTime, Time, TimeRange};
+pub use timezone::Timezone;
+
+/// Date and time types used by this crate.
+pub use chrono;
+/// IANA timezone names and daylight-saving rules.
+pub use chrono_tz;
+/// JSON definitions and metadata.
+pub use serde_json;
 
 #[cfg(doctest)]
 mod guide {

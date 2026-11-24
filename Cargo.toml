@@ -1,19 +1,23 @@
 [package]
-name = {{crate_name_quoted}}
-version = "0.1.0"
+name = "spatie-opening-hours"
+version = "1.0.0"
 edition = "2024"
 rust-version = "1.89"
-authors = [{{author_quoted}}]
-description = {{description_quoted}}
+authors = ["Freek Van der Herten <freek@spatie.be>"]
+description = "Query and format opening hours"
 license = "MIT"
-repository = "https://github.com/{{owner}}/{{repository}}"
-documentation = "https://docs.rs/{{crate_name}}"
+repository = "https://github.com/spatie/opening-hours-rust"
+documentation = "https://docs.rs/spatie-opening-hours"
 readme = "README.md"
 keywords = ["spatie"]
-categories = ["development-tools"]
-include = ["/src/", "/tests/*.rs", "/build.rs", "/docs/", "/README.md", "/LICENSE.md", "/CHANGELOG.md", "/CONTRIBUTING.md", "/SECURITY.md", "/Cargo.lock"]
+categories = ["date-and-time"]
+include = ["/src/", "/tests/", "/build.rs", "/docs/", "/README.md", "/LICENSE.md", "/CHANGELOG.md", "/CONTRIBUTING.md", "/SECURITY.md", "/Cargo.lock"]
 
 [dependencies]
+chrono = "0.4.42"
+chrono-tz = "0.10.4"
+serde_json = { version = "1.0", features = ["preserve_order"] }
+thiserror = "2"
 
 [lints.rust]
 unsafe_code = "forbid"

@@ -1,6 +1,6 @@
 ---
 title: v1
-slogan: {{description_quoted}}
-githubUrl: https://github.com/{{owner}}/{{repository}}
+slogan: "Query and format opening hours"
+githubUrl: https://github.com/spatie/opening-hours-rust
 branch: main
 ---

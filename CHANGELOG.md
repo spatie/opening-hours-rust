@@ -1,7 +1,7 @@
 # Changelog
 
-All notable changes to `{{crate_name}}` will be documented in this file.
+All notable changes to `spatie-opening-hours` will be documented in this file.
 
-## Unreleased
+## 1.0.0 - 2026-11-24
 
-- Initial development.
+- Initial Rust port of spatie/opening-hours: weekly schedules, exceptions, filters, overnight ranges, timezones, boundary searches, durations, structured data, and read-only value objects.
