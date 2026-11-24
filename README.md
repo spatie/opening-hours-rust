@@ -57,7 +57,7 @@ assert!(opening_hours.is_closed_on("2016-12-25")?);
 
 The crate supports overnight hours, recurring exceptions, date filters, business and output timezones, next/previous opening and closing times, open/closed durations, and schema.org structured data.
 
-See the [usage guide](https://github.com/spatie/opening-hours-rust/blob/main/docs/usage.md) and [PHP behavior mapping](https://github.com/spatie/opening-hours-rust/blob/main/docs/php-parity.md). Rust uses chrono date/time values, snake_case methods, `Result` for errors, `Option` for absence, and iterator operations for collection callbacks.
+See the [usage guide](https://github.com/spatie/opening-hours-rust/blob/main/docs/usage.md). The API uses chrono date/time values, `Result` for errors, `Option` for absence, and iterators for collections.
 
 ## Testing
 

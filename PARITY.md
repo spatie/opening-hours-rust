@@ -1,5 +1,5 @@
 ---
-title: PHP behavior mapping
+title: Internal behavior mapping
 weight: 6
 ---
 

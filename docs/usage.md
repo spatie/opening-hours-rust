@@ -156,7 +156,7 @@ opening_hours.add_filter(|date| {
 # }
 ```
 
-Filters are closures registered in Rust, not JSON values. Register filters from PHP's `filters` list first, followed by any callable exceptions, to retain their precedence. Filters run on each query and are not cached; slow filters can have a significant performance cost. `get_filters()` returns the installed filters.
+Filters are closures registered in order, not JSON values. Filters run on each query and are not cached; slow filters can have a significant performance cost. `get_filters()` returns the installed filters.
 
 ## Querying the schedule
 
@@ -197,11 +197,11 @@ assert_eq!(next_open.to_rfc3339(), "2016-12-26T09:00:00+00:00");
 # }
 ```
 
-`next_open` skips the current range. `next_close` includes its end. `previous_open` and `previous_close` search backwards. PHP's midnight and overnight placement rules are retained; a previous boundary at midnight can equal the input. Use `chrono::Local::now()` when you want to search from now.
+`next_open` skips the current range. `next_close` includes its end. `previous_open` and `previous_close` search backwards; a previous boundary at midnight can equal the input. Use `chrono::Local::now()` when you want to search from now.
 
 The default search horizon is 8 days, or 366 if exceptions are present. `set_day_limit` increases it. When no result is found, these methods return `Error::MaximumLimitExceeded`.
 
-The `_with` forms accept `SearchOptions`. `search_until` returns `Error::SearchLimitReached` when crossed; `cap` returns the cap instead. Unlike PHP, the limit also applies to a candidate found on the same day.
+The `_with` forms accept `SearchOptions`. `search_until` returns `Error::SearchLimitReached` when crossed; `cap` returns the cap instead. The limit also applies to a candidate found on the same day.
 
 ```rust
 # fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -241,11 +241,11 @@ The methods are `diff_in_open_hours`, `diff_in_open_minutes`, `diff_in_open_seco
 
 `current_open_range(&date)` returns `Some(DateTimeRange)` if open and `None` if closed. Its `start()` and `end()` are chrono date/time values, so you can format both date and time. `current_open_range_start` and `current_open_range_end` return the endpoints directly.
 
-The opening date can be yesterday for overnight ranges. The closing date can be tomorrow. A `24:00` endpoint is midnight on the next date. Like PHP, range lookup considers overnight ranges even when `overflow` is false; `is_open_at` only considers the previous night when the flag is true.
+The opening date can be yesterday for overnight ranges. The closing date can be tomorrow. A `24:00` endpoint is midnight on the next date. Range lookup considers overnight ranges even when `overflow` is false; `is_open_at` only considers the previous night when the flag is true.
 
 ### Collection callbacks
 
-The PHP `filter`, `map`, `flatMap`, `every` methods, and their exception equivalents, map to Rust iterators:
+Use iterators to select and transform days or exceptions:
 
 ```rust
 # fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -260,7 +260,7 @@ let closing_days: Vec<_> = opening_hours.for_week()
 # }
 ```
 
-Use `.all(...)` for PHP's `every`, `.flat_map(...)` for `flatMap`, and `exceptions()` as the source for exception callbacks.
+Use `.all(...)` to check every item, `.flat_map(...)` to flatten mapped items, and `exceptions()` to iterate over exceptions.
 
 ## Structured data
 
@@ -289,7 +289,7 @@ let structured_data = opening_hours.as_structured_data();
 # }
 ```
 
-Structured data allows overnight ranges by default. `00:00-00:00` means closed all day; `23:59` as a closing time means the end of the day. Seconds in structured input are stripped. `PublicHolidays` is unsupported, as in PHP.
+Structured data allows overnight ranges by default. `00:00-00:00` means closed all day; `23:59` as a closing time means the end of the day. Seconds in structured input are stripped. `PublicHolidays` is unsupported.
 
 `as_structured_data_formatted("%H:%M:%S%:z", Some("America/Toronto".parse()?))` customizes formatting and offsets. Timezone offsets for this export are applied on 1970-01-01; they do not represent summer daylight-saving time. JSON export does not include metadata or executable filters.
 
@@ -297,8 +297,8 @@ Structured data allows overnight ranges by default. `00:00-00:00` means closed a
 
 `OpeningHoursForDay` is read-only. It supports indexing, `len`, `is_empty`, and iteration. `from_strings` parses ranges, `from_ranges` validates typed ranges, and `from_definition` parses JSON. The day-level query methods include `is_open_at`, `is_open_at_night`, `next_open`, `next_close`, `previous_open`, `previous_close`, their `_range` forms, `for_time`, and `for_night_time`.
 
-`TimeRange` describes a period with a start and end, and displays as `HH:MM-HH:MM`. `from_string`, `from_definition`, `from_list`, and `from_midnight` construct ranges. `contains_time` checks the opening-day part; `contains_night_time` checks the next morning. `is_reversed` and `overflows_next_day` identify night ranges. `overlaps` retains PHP's directional comparison.
+`TimeRange` describes a period with a start and end, and displays as `HH:MM-HH:MM`. `from_string`, `from_definition`, `from_list`, and `from_midnight` construct ranges. `contains_time` checks the opening-day part; `contains_night_time` checks the next morning. `is_reversed` and `overflows_next_day` identify night ranges. `overlaps` checks whether an endpoint of the other range falls inside this range; a surrounding range can therefore require checking in both directions.
 
 `Time` describes a single time and displays as `HH:MM`. `from_string`, `from_date_time`, `hours`, `minutes`, comparison methods, `diff`, `to_date_time`, and `format` support clock-time operations. `24:00` is valid but `24:01` is not. `PreciseTime` keeps subsecond precision for comparisons. `with_data` attaches JSON metadata to a `Time`, `TimeRange`, or day.
 
-Formatting uses chrono/strftime directives, not PHP date format letters: `%H:%M` instead of `H:i`, `%a %H` instead of `D G`. `DateTimeRange` endpoints carry their calendar dates rather than embedding a date reference in `Time`. Recoverable errors use `Error`; missing ranges use `Option`.
+Formatting uses chrono/strftime directives, such as `%H:%M` for hours and minutes or `%a %H` for the abbreviated weekday and hour. `DateTimeRange` endpoints carry their calendar dates. Recoverable errors use `Error`; missing ranges use `Option`.
