@@ -1,4 +1,4 @@
-# spatie-opening-hours
+# A helper to query and format a set of opening hours
 
 [![Latest version on crates.io](https://img.shields.io/crates/v/spatie-opening-hours.svg?style=flat-square)](https://crates.io/crates/spatie-opening-hours)
 [![Tests](https://img.shields.io/github/actions/workflow/status/spatie/opening-hours-rust/ci.yml?branch=main&style=flat-square)](https://github.com/spatie/opening-hours-rust/actions/workflows/ci.yml)
